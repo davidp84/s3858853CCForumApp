@@ -8,6 +8,8 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromDays(1);
 });
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
