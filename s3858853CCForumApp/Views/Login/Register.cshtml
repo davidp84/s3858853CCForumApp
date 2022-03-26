@@ -1,0 +1,48 @@
+﻿@model Login
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1 class="display-4">Register</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Login">
+            <div class="form-group">
+                <label asp-for="ID" class="control-label"></label>
+                <input asp-for="ID" class="form-control" data-val="true"
+                       data-val-required="The ID field is required." />
+                <span asp-validation-for="ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" data-val="true"
+                       data-val-required="The Username field is required." />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="Password" class="control-label">Password</label>
+                <input id="Password" name="Password" type="password"
+                       class="form-control" data-val="true"
+                       data-val-required="The Password field is required." />
+                @Html.ValidationMessage("Password", new  { @class = "text-danger"})
+            </div>
+            <div class="form-group">
+                <label for="UserImage" class="control-label">UserImage</label>
+                <input id="UserImage" name="UserImage" type="file"
+                       class="form-control" data-val="true"
+                       data-val-required="The UserImage field is required." />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+
+            @Html.ValidationMessage("RegistrationFailure", new {@class = ""})
+        </form>
+    </div>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
