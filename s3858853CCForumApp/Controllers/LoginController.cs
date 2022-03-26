@@ -33,17 +33,25 @@ namespace s3858853CCForumApp.Controllers
                 EmulatorDetection = EmulatorDetection.EmulatorOrProduction
             }.Build();
 
+            KeyFactory _keyFactory = _context.CreateKeyFactory("user");
+
+            Key key = _keyFactory.CreateKey("default");
+
+            Query query = new Query("user")
+            {
+                Filter = Filter.Equal("id", loginID)
+            };
 
             //find login id
-            var login = await _context.user.FindAsync(loginID);
-
+            var login = _context.RunQueryLazilyAsync(query);
             //attempt password check
             //password would typically be hashed
             if (login == null || login.password != password)
             {
                 ModelState.AddModelError("LoginFailure", "ID or password is invalid");
-                return View(new Login { LoginID = loginID });
+                return View(new Login { id = loginID });
             }
+
 
             //Customer login
             HttpContext.Session.SetInt32(nameof(User.id), login.id);
