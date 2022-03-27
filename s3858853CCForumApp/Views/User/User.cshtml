@@ -1,63 +1,115 @@
-﻿@model User
-
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@model IPagedList<Post>
 @{
     ViewData["Title"] = "User Page";
     var user = (User)ViewBag.User;
 }
 @*<header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <div>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="User" asp-action="Deposit" asp-route-id="">Deposit</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="User" asp-action="Withdraw" asp-route-id="">Withdrawl</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="User" asp-action="Transfer" asp-route-id="">Transfer</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="User" asp-action="BillPay" asp-route-id="">Bill Payment</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="User" asp-action="Statement" asp-route-id="">My Statement</a>
-                    </li>
+    <div class="container">
+    <div>
+    <ul class="navbar-nav">
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-controller="User" asp-action="Deposit" asp-route-id="">Deposit</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-controller="User" asp-action="Withdraw" asp-route-id="">Withdrawl</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-controller="User" asp-action="Transfer" asp-route-id="">Transfer</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-controller="User" asp-action="BillPay" asp-route-id="">Bill Payment</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-controller="User" asp-action="Statement" asp-route-id="">My Statement</a>
+    </li>
 
-                </ul>
-            </div>
-        </div>
+    </ul>
+    </div>
+    </div>
     </nav>
-</header>*@
+    </header>*@
 
 <h1 class="display-4">User Page</h1>
 
 <div class="row">
     <div class="col-md-12">
-<form asp-action="Update">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="password">Old Password:</label>
-                        <input asp-for="password" type="text" class="form-control" id="password" value="" data-val="true"
-                               data-val-required="Old Password cannot be blank.">
-                        <span asp-validation-for="password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label label="newPassword">New Password:</label>
-                        <input label="newPassword" type="text" class="form-control" id="newPassword" value="" data-val="true"
-                               data-val-required="New Password cannot be blank.">
-                        <span label="newPassword" class="text-danger"></span>
-                    </div>
-                    <div>
-                        <table class="table">
-                            <tr>
-                                <td> <input type="submit" value="Update" class="btn btn-primary" asp-action="Profile" asp-route-id="@Model.id"></td>
-                                <td> <a class="btn btn-primary" asp-action="PassUpdate" asp-route-id="@Model.id">Change</a></td>
-                            </tr>
-                        </table>
-                    </div>
+        <form asp-action="UpdatePassword">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@user.password">Old Password:</label>
+                <input asp-for="@user.password" type="text" class="form-control" id="password" value="" data-val="true"
+                       data-val-required="Old Password cannot be blank.">
+                <span asp-validation-for="@user.password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label label="newPassword">New Password:</label>
+                <input label="newPassword" type="text" class="form-control" id="newPassword" value="" data-val="true"
+                       data-val-required="New Password cannot be blank.">
+                <span label="newPassword" class="text-danger"></span>
+            </div>
+            <div>
+                <table class="table">
+                    <tr>
+                        <td> <input type="submit" value="UpdatePassword" class="btn btn-primary" asp-action="Profile" asp-route-id="User.id"></td>
+                        <td> <a class="btn btn-primary" asp-action="PassUpdate" asp-route-id="User.id">Change</a></td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+
+        <form asp-action="UpdatePost">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <table class="table table-striped">
+                <tr>
+                    <th class="table-primary">@Html.DisplayNameFor(x => x[0].subject)</th>
+                    <th class="table-primary">@Html.DisplayNameFor(x => x[0].postTimeUTC)</th>
+                    <th class="table-primary">@Html.DisplayName("Edit")</th>
+                </tr>
+
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var previousPost = Model.ToList();
+
+                    if (previousPost[i] != null)
+                    {
+
+                        <tr>
+                            <td>@Html.DisplayFor(x => previousPost[i].subject)</td>
+                            <td>@Html.DisplayFor(x => previousPost[i].postTimeUTC)</td>
+
+                            <form asp-action="@previousPost[i].postTimeUTC">
+
+                            <td>
+                                <input asp-for="@previousPost[i].subject" name="EditPost" class="form-control"
+                               type="hidden" value="@previousPost[i].subject" />
+                                <input asp-for="@previousPost[i].messageText" name="EditPost" class="form-control"
+                               type="hidden" value="@previousPost[i].messageText" />
+                                <input asp-for="@previousPost[i].Image" name="EditPost" class="form-control"
+                               type="hidden" value="@previousPost[i].Image" />
+                                <input type="submit" class="btn btn-primary" asp-action="EditPost"
+                               value="Edit" asp-route-id="@previousPost[i].postTimeUTC" />
+                            </td>
                 </form>
+                </tr>
+                    }
+                }
+
+        </table>
+
+
+            @*        <div>
+                <table class="table">
+                <tr>
+                <td> <input type="submit" value="UpdatePost" class="btn btn-primary" asp-action="Profile" asp-route-id="@Model.id"></td>
+                <td> <a class="btn btn-primary" asp-action="PostUpdate" asp-route-id="@Model.id">Update</a></td>
+                </tr>
+                </table>
+                </div>*@
+        </form>
 
     </div>
 

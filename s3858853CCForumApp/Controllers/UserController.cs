@@ -10,6 +10,7 @@ namespace s3858853CCForumApp.Controllers
         //private readonly s3858853CCForumAppContext _context;
 
         private int UserID => HttpContext.Session.GetInt32(nameof(User.id)).Value;
+        private int UserName => HttpContext.Session.GetInt32(nameof(User.user_name)).Value;
 
         //public UserController(s3858853CCForumAppContext context)
         //{
@@ -93,7 +94,7 @@ namespace s3858853CCForumApp.Controllers
             {
                 //Then check original password, if correct update password
                 if (x["password"].Equals(password))
-                {                  
+                {
                     confirmed = true;
                     Entity update = new Entity
                     {
@@ -106,7 +107,7 @@ namespace s3858853CCForumApp.Controllers
                 }
             });
 
-             
+
             if (confirmed == true)
             {
                 return RedirectToAction("Login", "User");
@@ -119,4 +120,70 @@ namespace s3858853CCForumApp.Controllers
             }
 
         }
+
+        public async Task<IActionResult> EditPost()
+        {
+            DatastoreDb _context = new DatastoreDbBuilder
+            {
+                ProjectId = "s3858853-a1",
+                EmulatorDetection = EmulatorDetection.EmulatorOrProduction
+            }.Build();
+
+            KeyFactory _keyFactory = _context.CreateKeyFactory("user");
+
+            Key key = _keyFactory.CreateKey("default");
+
+            Query query = new Query("post")
+            {
+                Filter = Filter.Equal("User", UserName)
+            };
+
+            var customer = _context.RunQueryLazilyAsync(query);
+            return View(customer);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPost(string subject, string messageText, string Image, DateTime postTimeUTC)
+        {
+            DatastoreDb _context = new DatastoreDbBuilder
+            {
+                ProjectId = "s3858853-a1",
+                EmulatorDetection = EmulatorDetection.EmulatorOrProduction
+            }.Build();
+
+            KeyFactory _keyFactory = _context.CreateKeyFactory("user");
+
+            Key key = _keyFactory.CreateKey("default");
+
+            Query query = new Query("post")
+            {
+                Filter = Filter.Equal("User", UserName)
+            };
+
+            var customer = _context.RunQueryLazilyAsync(query);
+
+            await customer.ForEachAsync(x =>
+            {
+                //Then check original password, if correct update password
+                if (x["postTimeUTC"].Equals(postTimeUTC))
+                {
+                    
+                    Entity update = new Entity
+                    {
+                        Key = x.Key,
+                        ["subject"] = subject,
+                        ["messageText"] = messageText,
+                        ["User"] = x["User"],
+                        ["postTimeUTC"] = DateTime.Now,
+                        ["Image"] = Image
+                    };
+                    _context.UpdateAsync(update);
+                }
+            });
+
+            return RedirectToAction("Forum", "User");
+
+
+        }
     }
+}
