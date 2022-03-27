@@ -1,49 +1,63 @@
-﻿@{
-    ViewData["Title"] = "Forum Page";
+﻿@model User
+
+@{
+    ViewData["Title"] = "User Page";
     var user = (User)ViewBag.User;
 }
-<header>
+@*<header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
             <div>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Customer" asp-action="Deposit" asp-route-id="">Deposit</a>
+                        <a class="nav-link text-dark" asp-controller="User" asp-action="Deposit" asp-route-id="">Deposit</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Customer" asp-action="Withdraw" asp-route-id="">Withdrawl</a>
+                        <a class="nav-link text-dark" asp-controller="User" asp-action="Withdraw" asp-route-id="">Withdrawl</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Customer" asp-action="Transfer" asp-route-id="">Transfer</a>
+                        <a class="nav-link text-dark" asp-controller="User" asp-action="Transfer" asp-route-id="">Transfer</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Customer" asp-action="BillPay" asp-route-id="">Bill Payment</a>
+                        <a class="nav-link text-dark" asp-controller="User" asp-action="BillPay" asp-route-id="">Bill Payment</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Customer" asp-action="Statement" asp-route-id="">My Statement</a>
+                        <a class="nav-link text-dark" asp-controller="User" asp-action="Statement" asp-route-id="">My Statement</a>
                     </li>
 
                 </ul>
             </div>
         </div>
     </nav>
-</header>
+</header>*@
 
-<h1 class="display-4">Forum Page</h1>
+<h1 class="display-4">User Page</h1>
 
 <div class="row">
     <div class="col-md-12">
-        <table class="table table-striped">
-            <tr>
-                <th class="table-primary">test</th>
-
-            </tr>
-                <tr>
-                    <td>test 2</td>
-
-                </tr>
-            
-        </table>
+<form asp-action="Update">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="password">Old Password:</label>
+                        <input asp-for="password" type="text" class="form-control" id="password" value="" data-val="true"
+                               data-val-required="Old Password cannot be blank.">
+                        <span asp-validation-for="password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label label="newPassword">New Password:</label>
+                        <input label="newPassword" type="text" class="form-control" id="newPassword" value="" data-val="true"
+                               data-val-required="New Password cannot be blank.">
+                        <span label="newPassword" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <table class="table">
+                            <tr>
+                                <td> <input type="submit" value="Update" class="btn btn-primary" asp-action="Profile" asp-route-id="@Model.id"></td>
+                                <td> <a class="btn btn-primary" asp-action="PassUpdate" asp-route-id="@Model.id">Change</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
 
     </div>
 
