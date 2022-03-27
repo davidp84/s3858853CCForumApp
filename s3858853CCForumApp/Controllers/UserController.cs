@@ -102,10 +102,11 @@ namespace s3858853CCForumApp.Controllers
                         ["user_name"] = x["user_name"],
                         ["password"] = password
                     };
-                    
+                    _context.UpdateAsync(update);
                 }
             });
 
+             
             if (confirmed == true)
             {
                 return RedirectToAction("Login", "User");
