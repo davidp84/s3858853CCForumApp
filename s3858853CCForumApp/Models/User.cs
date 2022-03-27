@@ -20,5 +20,7 @@ namespace s3858853CCForumApp.Models
         [Required, StringLength(50)]
         public string password { get; set; }
 
+        public string image { get; set; }
+
     }
 }

@@ -2,6 +2,8 @@
 using Google.Cloud.Datastore.V1;
 using Microsoft.AspNetCore.Mvc;
 using s3858853CCForumApp.Data;
+using s3858853CCForumApp.Models;
+using System.Linq;
 
 namespace s3858853CCForumApp.Controllers
 {
@@ -155,7 +157,7 @@ namespace s3858853CCForumApp.Controllers
 
             Key key = _keyFactory.CreateKey("default");
 
-            Query query = new Query("post")
+            Query query = new Query("user")
             {
                 Filter = Filter.Equal("User", UserName)
             };
@@ -167,7 +169,7 @@ namespace s3858853CCForumApp.Controllers
                 //Then check original password, if correct update password
                 if (x["postTimeUTC"].Equals(postTimeUTC))
                 {
-                    
+
                     Entity update = new Entity
                     {
                         Key = x.Key,
@@ -183,6 +185,60 @@ namespace s3858853CCForumApp.Controllers
 
             return RedirectToAction("Forum", "User");
 
+        }
+
+        public async Task<IActionResult> NewPost()
+        {
+            DatastoreDb _context = new DatastoreDbBuilder
+            {
+                ProjectId = "s3858853-a1",
+                EmulatorDetection = EmulatorDetection.EmulatorOrProduction
+            }.Build();
+
+            KeyFactory _keyFactory = _context.CreateKeyFactory("post");
+
+            Key key = _keyFactory.CreateKey("default");
+
+            Query query = new Query("post")
+            {
+                Filter = Filter.Equal("User", UserName)
+            };
+
+            var customer = _context.RunQueryLazilyAsync(query);
+            return View(customer);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewPost(string subject, string messageText, string imageName, File image)
+        {
+            DatastoreDb _context = new DatastoreDbBuilder
+            {
+                ProjectId = "s3858853-a1",
+                EmulatorDetection = EmulatorDetection.EmulatorOrProduction
+            }.Build();
+
+            KeyFactory _keyFactory = _context.CreateKeyFactory("post");
+
+            Key key = _keyFactory.CreateKey("default");
+
+            string imageString = "gs://s3858853-a1-storage/" + imageName;
+
+            // Upload image to bucket
+
+            Entity update = new Entity
+            {
+                Key = key,
+                ["subject"] = subject,
+                ["messageText"] = messageText,
+                ["User"] = UserID,
+                ["postTimeUTC"] = DateTime.Now,
+                ["Image"] = imageString
+            };
+            await _context.InsertAsync(update);
+
+
+
+            return RedirectToAction("Forum", "User");
 
         }
     }

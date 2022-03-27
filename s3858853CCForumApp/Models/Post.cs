@@ -17,7 +17,7 @@ namespace s3858853CCForumApp.Models
 
         public DateTime postTimeUTC { get; init; }
 
-        public string Image { get; init; } //Maybe save objects???
+        public string Image { get; init; }
 
     }
 }

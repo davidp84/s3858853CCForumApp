@@ -20,7 +20,7 @@ namespace s3858853CCForumApp.Controllers
 
         //attempt user registration
         [HttpPost]
-        public async Task<IActionResult> Register(string loginID, string username, string password)
+        public async Task<IActionResult> Register(string loginID, string username, string password, string image)
         {
 
             DatastoreDb _context = new DatastoreDbBuilder
@@ -65,7 +65,8 @@ namespace s3858853CCForumApp.Controllers
                 Key = _context.CreateKeyFactory("user").CreateKey("default"),
                 ["id"] = loginID,
                 ["user_name"] = username,
-                ["password"] = password
+                ["password"] = password,
+                ["image"] = image
             };
 
             await _context.InsertAsync(user);
