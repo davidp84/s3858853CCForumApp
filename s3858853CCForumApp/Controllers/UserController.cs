@@ -79,18 +79,35 @@ namespace s3858853CCForumApp.Controllers
             };
 
             var customer = _context.RunQueryLazilyAsync(query);
-            
+
             //check password is not null
             if ((newPassword == null))
             {
                 ModelState.AddModelError("PasswordError", "New Password is needed");
                 return View(customer);
             }
-            //Then check original password, if correct update password
-            else if (password == customer.password)
+
+            bool confirmed = false;
+
+            await customer.ForEachAsync(x =>
             {
-                customer["password"] = password;
-                
+                //Then check original password, if correct update password
+                if (x["password"].Equals(password))
+                {                  
+                    confirmed = true;
+                    Entity update = new Entity
+                    {
+                        Key = x.Key,
+                        ["id"] = x["id"],
+                        ["user_name"] = x["user_name"],
+                        ["password"] = password
+                    };
+                    
+                }
+            });
+
+            if (confirmed == true)
+            {
                 return RedirectToAction("Login", "User");
             }
             //finally if password not verified or another error, return error screen
@@ -101,4 +118,4 @@ namespace s3858853CCForumApp.Controllers
             }
 
         }
-}
+    }

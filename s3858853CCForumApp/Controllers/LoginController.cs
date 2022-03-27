@@ -46,14 +46,31 @@ namespace s3858853CCForumApp.Controllers
             var login = _context.RunQueryLazilyAsync(query);
             //attempt password check
             //password would typically be hashed
-            if (login == null || login.password != password)
+            if (login == null)
+            {
+                ModelState.AddModelError("LoginFailure", "ID or password is invalid");
+                return View(new Login { id = loginID });
+            }
+
+            bool confirmed = false;
+
+            await login.ForEachAsync(x =>
+            {
+                if (x["password"].Equals(password))
+                {
+                    confirmed = true;
+                }
+            });
+
+            if (confirmed == false)
             {
                 ModelState.AddModelError("LoginFailure", "ID or password is invalid");
                 return View(new Login { id = loginID });
             }
 
 
-            //Customer login
+
+            //customer login
             HttpContext.Session.SetInt32(nameof(User.id), login.id);
             HttpContext.Session.SetString(nameof(User.user_name), login.User.user_name);
 
