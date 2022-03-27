@@ -1,9 +1,11 @@
 ﻿using Google.Api.Gax;
 using Google.Cloud.Datastore.V1;
+using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Mvc;
 using s3858853CCForumApp.Data;
 using s3858853CCForumApp.Models;
 using System.Linq;
+using System.Text;
 
 namespace s3858853CCForumApp.Controllers
 {
@@ -209,7 +211,7 @@ namespace s3858853CCForumApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewPost(string subject, string messageText, string imageName, File image)
+        public async Task<IActionResult> NewPost(string subject, string messageText, string imageName, IFormFile image)
         {
             DatastoreDb _context = new DatastoreDbBuilder
             {
@@ -224,6 +226,25 @@ namespace s3858853CCForumApp.Controllers
             string imageString = "gs://s3858853-a1-storage/" + imageName;
 
             // Upload image to bucket
+
+            var client = StorageClient.Create();
+
+            var bucket = client.GetBucketAsync("s3858853-a1-storage");
+
+            // Upload some files
+            var obj1 = client.UploadObject(bucket, imageName, "image/png", new MemoryStream());
+
+            // List objects
+            foreach (var obj in client.ListObjects(bucketName, ""))
+            {
+                Console.WriteLine(obj.Name);
+            }
+
+            // Download file
+            using (var stream = File.OpenWrite("file1.txt"))
+            {
+                client.DownloadObject(bucketName, "file1.txt", stream);
+            }
 
             Entity update = new Entity
             {
