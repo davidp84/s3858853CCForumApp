@@ -211,7 +211,7 @@ namespace s3858853CCForumApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewPost(string subject, string messageText, string imageName, IFormFile image)
+        public async Task<IActionResult> NewPost(string subject, string messageText, string imageName, IFormFile image, string imagePath)
         {
             DatastoreDb _context = new DatastoreDbBuilder
             {
@@ -225,25 +225,35 @@ namespace s3858853CCForumApp.Controllers
 
             string imageString = "gs://s3858853-a1-storage/" + imageName;
 
-            // Upload image to bucket
+
+            //var fileToTransfer = File.OpenRead(image);
+
+            //var content = Encoding.UTF8.GetBytes(image);
+
+            //using (var f = File.Open(imagePath, FileAccess.Read))
+            //{
+            //    string objectName = imageName;
+            //    client.UploadObjectAsync(bucket, objectName, null, f);
+            //}
+
+
+            // Prepare bucket and image for upload
 
             var client = StorageClient.Create();
 
             var bucket = client.GetBucketAsync("s3858853-a1-storage");
 
-            // Upload some files
-            var obj1 = client.UploadObject(bucket, imageName, "image/png", new MemoryStream());
+            var content = new FileStream(imagePath, FileMode.Open, FileAccess.Read);
 
-            // List objects
-            foreach (var obj in client.ListObjects(bucketName, ""))
+
+            // Upload file to bucket
+            if (imageName.Contains(".png"))
             {
-                Console.WriteLine(obj.Name);
+                var obj1 = client.UploadObjectAsync("s3858853-a1-storage", imageName, "image/png", content);
             }
-
-            // Download file
-            using (var stream = File.OpenWrite("file1.txt"))
+            else
             {
-                client.DownloadObject(bucketName, "file1.txt", stream);
+                var obj1 = client.UploadObjectAsync("s3858853-a1-storage", imageName, "image/jpg", content);
             }
 
             Entity update = new Entity
@@ -256,8 +266,6 @@ namespace s3858853CCForumApp.Controllers
                 ["Image"] = imageString
             };
             await _context.InsertAsync(update);
-
-
 
             return RedirectToAction("Forum", "User");
 
