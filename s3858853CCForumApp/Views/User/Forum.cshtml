@@ -1,6 +1,6 @@
-﻿@using X.PagedList
-@using X.PagedList.Mvc.Core
-@using X.PagedList.Web.Common
+﻿@*@using X.PagedList
+    @using X.PagedList.Mvc.Core
+    @using X.PagedList.Web.Common*@
 @model List<Post>
 @{
     ViewData["Title"] = "Forum Page";
@@ -33,9 +33,9 @@
     </nav>
     </header>*@
 
-<h1 class="display-4">User Page</h1>
+<h1 class="display-4">Forum Page</h1>
 <a asp-controller="User" asp-action="User" asp-route-id="">@user.user_name</a>
-<img src="~/@user.image" width="120px" height="120px"/> 
+<img src="~/@user.image" width="120px" height="120px" />
 
 <div class="row">
     <div class="col-md-12">
@@ -57,7 +57,7 @@
                     <label for="Image">Image</label>
                     <input type="file" name="Image" />
                     <input name="imageName" type="hidden" value=Path.GetFileName(Image.FileName) />
-                    <input name="imagePath" type="hidden" value=Image.FilePath/>
+                    <input name="imagePath" type="hidden" value=Image.FilePath />
                     <br />
                     @*<input type="submit" value="Upload" />*@
                 </fieldset>
@@ -72,58 +72,45 @@
             </div>
         </form>
 
-        <form asp-action="UpdatePost">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <table class="table table-striped">
+
+        <div class="row"></div>
+        <table class="table table-striped">
+
+
+            @for (int i = 0; i < 10; i++)
+            {
+                var previousPost = Model.ToList();
+                var postCount = Model.Count - i;
+
                 <tr>
-                    <th class="table-primary">@Html.DisplayNameFor(x => x[0].subject)</th>
                     <th class="table-primary">@Html.DisplayNameFor(x => x[0].postTimeUTC)</th>
-                    <th class="table-primary">@Html.DisplayName("Edit")</th>
+                    <th class="table-primary">@Html.DisplayNameFor(x => x[0].User.user_name)</th>
+                    <th class="table-primary">@Html.DisplayNameFor(x => x[0].User.image)</th>
                 </tr>
 
-                @for (int i = 0; i < Model.Count; i++)
+                var userImage = previousPost[postCount].Image;
+                var postImage = previousPost[postCount].Image;
+
+                if (previousPost[i] != null)
                 {
-                    var previousPost = Model.ToList();
 
-                    if (previousPost[i] != null)
-                    {
+                    <tr>
+                        <td>@Html.DisplayFor(x => previousPost[postCount].postTimeUTC)</td>
+                        <td>@Html.DisplayFor(x => previousPost[postCount].User.user_name)</td>
+                        <td><img src=@userImage width="120px" height="120px"/></td> 
+                    </tr>
 
-                        <tr>
-                            <td>@Html.DisplayFor(x => previousPost[i].subject)</td>
-                            <td>@Html.DisplayFor(x => previousPost[i].postTimeUTC)</td>
 
-                            <form asp-action="@previousPost[i].postTimeUTC">
-
-                            <td>
-                                <input asp-for="@previousPost[i].subject" name="EditPost" class="form-control"
-                               type="hidden" value="@previousPost[i].subject" />
-                                <input asp-for="@previousPost[i].messageText" name="EditPost" class="form-control"
-                               type="hidden" value="@previousPost[i].messageText" />
-                                <input asp-for="@previousPost[i].Image" name="EditPost" class="form-control"
-                               type="hidden" value="@previousPost[i].Image" />
-                                <input type="submit" class="btn btn-primary" asp-action="EditPost"
-                               value="Edit" asp-route-id="@previousPost[i].postTimeUTC" />
-                            </td>
-                </form>
-                </tr>
-                    }
+                    <tr>@Html.DisplayFor(x => previousPost[postCount].subject)</tr>
+                    <tr>@Html.DisplayFor(x => previousPost[postCount].messageText)</tr>
+                    <tr><td><img src=@postImage width="120px" height="120px"/></td></tr>
                 }
+            }
 
         </table>
-
-
-            @*        <div>
-                <table class="table">
-                <tr>
-                <td> <input type="submit" value="UpdatePost" class="btn btn-primary" asp-action="Profile" asp-route-id="@Model.id"></td>
-                <td> <a class="btn btn-primary" asp-action="PostUpdate" asp-route-id="@Model.id">Update</a></td>
-                </tr>
-                </table>
-                </div>*@
-        </form>
 
     </div>
 
     <div>
-        <a asp-action="Index">Back to Home</a>
+        <a asp-action="Logout">Logout</a>
     </div>
