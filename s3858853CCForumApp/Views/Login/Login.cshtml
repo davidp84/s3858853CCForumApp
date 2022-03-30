@@ -10,10 +10,10 @@
     <div class="col-md-4">
         <form asp-action="Login">
             <div class="form-group">
-                <label asp-for="LoginID" class="control-label"></label>
-                <input asp-for="LoginID" class="form-control" data-val="true"
+                <label asp-for="id" class="control-label"></label>
+                <input asp-for="id" class="form-control" data-val="true"
                        data-val-required="The LoginID field is required." />
-                <span asp-validation-for="LoginID" class="text-danger"></span>
+                <span asp-validation-for="id" class="text-danger"></span>
 
             </div>
             <div class="form-group">
@@ -32,6 +32,20 @@
         </form>
     </div>
 </div>
+
+@*Maybe have to use a different method to Link to Register Page*@
+<div class="row">
+    <div class="col-md-4">
+        <form action="../Register">
+            <div class="form-group">
+                <input type="submit" value="Register" name="Register" class="btn btn-primary" />
+            </div>
+
+            @Html.ValidationMessage("LoginFailure", new {@class = ""})
+        </form>
+    </div>
+</div>
+
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
