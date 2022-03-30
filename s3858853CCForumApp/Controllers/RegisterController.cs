@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Google.Cloud.Datastore.V1;
 using Google.Api.Gax;
+using Google.Cloud.Storage.V1;
 
 namespace s3858853CCForumApp.Controllers
 {
@@ -20,7 +21,7 @@ namespace s3858853CCForumApp.Controllers
 
         //attempt user registration
         [HttpPost]
-        public async Task<IActionResult> Register(string loginID, string username, string password, string image)
+        public async Task<IActionResult> Register(string loginID, string username, string password, string imageName, string imagePath, IFormFile image)
         {
 
             DatastoreDb _context = new DatastoreDbBuilder
@@ -60,18 +61,36 @@ namespace s3858853CCForumApp.Controllers
                 return View();
             }
 
+            string imageString = "gs://s3858853-a1-storage/" + imageName;
+
             Entity user = new Entity()
             {
                 Key = _context.CreateKeyFactory("user").CreateKey("default"),
                 ["id"] = loginID,
                 ["user_name"] = username,
                 ["password"] = password,
-                ["image"] = image
+                ["image"] = imageString
             };
 
             await _context.InsertAsync(user);
 
-            // File uploaded to Cloud Storage
+            // Prepare bucket and image for upload
+
+            var client = StorageClient.Create();
+
+            var bucket = client.GetBucketAsync("s3858853-a1-storage");
+
+            var content = new FileStream(imagePath, FileMode.Open, FileAccess.Read);
+
+            // Upload file to bucket
+            if (imageName.Contains(".png"))
+            {
+                var obj1 = client.UploadObjectAsync("s3858853-a1-storage", imageName, "image/png", content);
+            }
+            else
+            {
+                var obj1 = client.UploadObjectAsync("s3858853-a1-storage", imageName, "image/jpg", content);
+            }
 
             return RedirectToAction("Login", "User");
 

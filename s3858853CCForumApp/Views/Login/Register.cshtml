@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Login">
+        <form asp-action="Register" enctype="multipart/form-data">
             <div class="form-group">
                 <label asp-for="id" class="control-label"></label>
                 <input asp-for="id" class="form-control" data-val="true"
@@ -29,9 +29,14 @@
                 @Html.ValidationMessage("Password", new  { @class = "text-danger"})
             </div>
             <div class="form-group">
-                <label for="UserImage" class="control-label">UserImage</label>
-                <input id="UserImage" name="UserImage" type="file"
-                       class="form-control" data-val="true" />
+                <fieldset>
+                    <legend>Upload Image</legend>
+                    <label for="Image">Image</label>
+                    <input type="file" name="Image" />
+                    <input name="imageName" type="hidden" value=Path.GetFileName(Image.FileName) />
+                    <input name="imagePath" type="hidden" value=Image.FilePath/>
+                    <br />
+                </fieldset>
             </div>
             <div class="form-group">
                 <input type="submit" value="Register" class="btn btn-primary" />
@@ -42,6 +47,7 @@
     </div>
 </div>
 @section Scripts{
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
