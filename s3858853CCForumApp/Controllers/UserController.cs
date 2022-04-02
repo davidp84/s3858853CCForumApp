@@ -23,7 +23,6 @@ namespace s3858853CCForumApp.Controllers
         //    _context = context;
         //}
 
-
         public IActionResult Index()
         {
             DatastoreDb _context = new DatastoreDbBuilder
