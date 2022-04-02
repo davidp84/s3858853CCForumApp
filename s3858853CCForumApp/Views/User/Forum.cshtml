@@ -1,37 +1,8 @@
-﻿@*@using X.PagedList
-    @using X.PagedList.Mvc.Core
-    @using X.PagedList.Web.Common*@
-@model List<Post>
+﻿@model List<Post>
 @{
     ViewData["Title"] = "Forum Page";
     var user = (User)ViewBag.User;
 }
-@*<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-    <div>
-    <ul class="navbar-nav">
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-controller="User" asp-action="Deposit" asp-route-id="">Deposit</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-controller="User" asp-action="Withdraw" asp-route-id="">Withdrawl</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-controller="User" asp-action="Transfer" asp-route-id="">Transfer</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-controller="User" asp-action="BillPay" asp-route-id="">Bill Payment</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-controller="User" asp-action="Statement" asp-route-id="">My Statement</a>
-    </li>
-
-    </ul>
-    </div>
-    </div>
-    </nav>
-    </header>*@
 
 <h1 class="display-4">Forum Page</h1>
 <a asp-controller="User" asp-action="User" asp-route-id="">@user.user_name</a>
@@ -97,13 +68,13 @@
                     <tr>
                         <td>@Html.DisplayFor(x => previousPost[postCount].postTimeUTC)</td>
                         <td>@Html.DisplayFor(x => previousPost[postCount].User.user_name)</td>
-                        <td><img src=@userImage width="120px" height="120px"/></td> 
+                        <td><img src=@userImage width="120px" height="120px" /></td>
                     </tr>
 
 
                     <tr>@Html.DisplayFor(x => previousPost[postCount].subject)</tr>
                     <tr>@Html.DisplayFor(x => previousPost[postCount].messageText)</tr>
-                    <tr><td><img src=@postImage width="120px" height="120px"/></td></tr>
+                    <tr><td><img src=@postImage width="120px" height="120px" /></td></tr>
                 }
             }
 

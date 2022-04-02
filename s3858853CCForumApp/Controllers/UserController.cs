@@ -12,16 +12,10 @@ namespace s3858853CCForumApp.Controllers
 {
     public class UserController : Controller
     {
-        //private readonly s3858853CCForumAppContext _context;
 
         private string UserID => HttpContext.Session.GetString("sessionID");
 
         private string UserName => HttpContext.Session.GetString("user_name");
-
-        //public UserController(s3858853CCForumAppContext context)
-        //{
-        //    _context = context;
-        //}
 
         public IActionResult Index()
         {
@@ -225,18 +219,6 @@ namespace s3858853CCForumApp.Controllers
             Key key = _keyFactory.CreateKey("default");
 
             string imageString = "gs://s3858853-a1-storage/" + imageName;
-
-
-            //var fileToTransfer = File.OpenRead(image);
-
-            //var content = Encoding.UTF8.GetBytes(image);
-
-            //using (var f = File.Open(imagePath, FileAccess.Read))
-            //{
-            //    string objectName = imageName;
-            //    client.UploadObjectAsync(bucket, objectName, null, f);
-            //}
-
 
             // Prepare bucket and image for upload
 

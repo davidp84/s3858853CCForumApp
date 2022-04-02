@@ -17,7 +17,7 @@ namespace s3858853CCForumApp.Controllers
 
         public LoginController()
         {
-            //DatastoreDb _context = DatastoreDb.Create("s3858853 - a1");
+            
         }
 
         public IActionResult Login() => View();
@@ -26,7 +26,6 @@ namespace s3858853CCForumApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string loginID, string password)
         {
-            //DatastoreDb _context = DatastoreDb.Create("s3858853-a1");
             DatastoreDb _context = new DatastoreDbBuilder
             {
                 ProjectId = "s3858853-a1",
