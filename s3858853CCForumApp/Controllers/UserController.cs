@@ -14,9 +14,9 @@ namespace s3858853CCForumApp.Controllers
     {
         //private readonly s3858853CCForumAppContext _context;
 
-        private int UserID => HttpContext.Session.GetString(nameof(User.loginID)).Value;
+        private string UserID => HttpContext.Session.GetString("sessionID");
 
-        private int UserName => HttpContext.Session.GetString(nameof(User.user_name)).Value;
+        private string UserName => HttpContext.Session.GetString("user_name");
 
         //public UserController(s3858853CCForumAppContext context)
         //{

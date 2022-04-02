@@ -71,8 +71,8 @@ namespace s3858853CCForumApp.Controllers
             }
 
             //customer login
-            HttpContext.Session.SetString(loginID, loginID);
-            HttpContext.Session.SetString(customer, customer);
+            HttpContext.Session.SetString("sessionID", loginID);
+            HttpContext.Session.SetString("username", customer);
 
             return RedirectToAction("Index", "User");
         }
