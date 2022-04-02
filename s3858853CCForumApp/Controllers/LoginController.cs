@@ -53,12 +53,14 @@ namespace s3858853CCForumApp.Controllers
             }
 
             bool confirmed = false;
+            var customer = "No Customer";
 
             await login.ForEachAsync(x =>
             {
                 if (x["password"].Equals(password))
                 {
                     confirmed = true;
+                    customer = (string)x["user_name"];
                 }
             });
 
@@ -68,11 +70,9 @@ namespace s3858853CCForumApp.Controllers
                 return View(new Login { id = loginID });
             }
 
-
-
             //customer login
-            HttpContext.Session.SetInt32(nameof(User.id), login.id);
-            HttpContext.Session.SetString(nameof(User.user_name), login.User.user_name);
+            HttpContext.Session.SetString(loginID, loginID);
+            HttpContext.Session.SetString(customer, customer);
 
             return RedirectToAction("Index", "User");
         }

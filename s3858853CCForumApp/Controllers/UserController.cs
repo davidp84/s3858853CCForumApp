@@ -6,6 +6,7 @@ using s3858853CCForumApp.Data;
 using s3858853CCForumApp.Models;
 using System.Linq;
 using System.Text;
+using System.Security.Claims;
 
 namespace s3858853CCForumApp.Controllers
 {
@@ -13,8 +14,9 @@ namespace s3858853CCForumApp.Controllers
     {
         //private readonly s3858853CCForumAppContext _context;
 
-        private int UserID => HttpContext.Session.GetInt32(nameof(User.id)).Value;
-        private int UserName => HttpContext.Session.GetInt32(nameof(User.user_name)).Value;
+        private int UserID => HttpContext.Session.GetString(nameof(User.loginID)).Value;
+
+        private int UserName => HttpContext.Session.GetString(nameof(User.user_name)).Value;
 
         //public UserController(s3858853CCForumAppContext context)
         //{
