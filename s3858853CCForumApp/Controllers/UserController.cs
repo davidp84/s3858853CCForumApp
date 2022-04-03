@@ -71,12 +71,21 @@ namespace s3858853CCForumApp.Controllers
 
             var queryUser = "";
 
+            var tempUser = new User();
+
             await entities.ForEachAsync(x =>
             {
-                ViewBag.user = x;
-                queryUser = (string)x["user_name"];
                 
+                queryUser = (string)x["user_name"];
+
+                tempUser.id = (string)x["id"];
+                tempUser.user_name = (string)x["user_name"];
+                tempUser.password = (string)x["password"];
+                tempUser.image = (string)x["image"];
+
             });
+
+            ViewBag.user = tempUser;
 
             KeyFactory _newKeyFactory = _context.CreateKeyFactory("post");
 
@@ -90,16 +99,21 @@ namespace s3858853CCForumApp.Controllers
             //lazy loading
             var posts = _context.RunQueryLazilyAsync(secondQuery);
 
-            var user = new Dictionary<string, Entity>();
+            var tempPost = new Post();
 
-            var userPosts = posts.GetAsyncEnumerator(CancellationToken.None);
+            var userPosts = new List<Post>();
 
-            //await entities.ForEachAsync(x =>
-            //{
-            //    user.TryAdd(x.Properties.ToDictionary(x => x.Key, x => x.Value));
-            //});
+            await entities.ForEachAsync(x =>
+            {
+                tempPost.subject = (string)x["subject"];
+                tempPost.UserID = (string)x["UserID"];
+                tempPost.messageText = (string)x["messageText"];
+                tempPost.postTimeUTC = (string)x["postTimeUTC"];
+                tempPost.Image = (string)x["Image"];
 
-            
+                userPosts.Add(tempPost);
+
+            });
 
             return View(userPosts);
         }

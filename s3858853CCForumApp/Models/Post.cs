@@ -7,17 +7,18 @@ namespace s3858853CCForumApp.Models
     {
         [Column(TypeName = "nchar")]
         [Required, StringLength(64)]
-        public string subject { get; init; }
+        public string subject { get; set; }
 
-        public string UserID { get; init; }
+        public string UserID { get; set; }
 
         [Column(TypeName = "nchar")]
         [Required]
-        public string messageText { get; init; }
+        public string messageText { get; set; }
 
-        public DateTime postTimeUTC { get; init; }
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd hh:mm:ss:fff }", ApplyFormatInEditMode = true)]
+        public string postTimeUTC { get; set; }
 
-        public string Image { get; init; }
+        public string Image { get; set; }
 
     }
 }
