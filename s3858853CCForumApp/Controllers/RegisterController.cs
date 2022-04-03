@@ -21,7 +21,7 @@ namespace s3858853CCForumApp.Controllers
 
         //attempt user registration
         [HttpPost]
-        public async Task<IActionResult> Register(string id, string user_name, string Password, string imageName, string imagePath, IFormFile Image)
+        public async Task<IActionResult> Register(string id, string user_name, string Password, IFormFile Image)
         {
 
             DatastoreDb _context = new DatastoreDbBuilder
@@ -82,6 +82,8 @@ namespace s3858853CCForumApp.Controllers
                 return View();
             }
 
+            var imageName = Image.FileName;
+
             string imageString = "gs://s3858853-a1-storage/" + imageName;
 
             KeyFactory keyFactory = _context.CreateKeyFactory("user");
@@ -103,23 +105,32 @@ namespace s3858853CCForumApp.Controllers
 
             var bucket = client.GetBucketAsync("s3858853-a1-storage");
 
-            var filePath = Path.GetFullPath(imageName);
+            var obj1 = "a";
 
-            var content = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-
-            // Upload file to bucket
             if (imageName.Contains(".png"))
             {
-                var obj1 = client.UploadObjectAsync("s3858853-a1-storage", imageName, "image/png", content);
+                obj1 = "image/png";
             }
             else
             {
-                var obj1 = client.UploadObjectAsync("s3858853-a1-storage", imageName, "image/jpg", content);
+                obj1 = "image/jpg";
             }
 
-            return RedirectToAction("Login", "User");
+            // Upload file to bucket
+            using (var memoryStream = new MemoryStream())
+            {
+                await Image.CopyToAsync(memoryStream);
+                var dataObject = await client.UploadObjectAsync("s3858853-a1-storage", imageName, obj1, memoryStream);                
+            }
+
+            
+   
+
+            return RedirectToAction("Login", "Login");
 
         }
+
+        //private async Task UploadFile()
 
     }
 }

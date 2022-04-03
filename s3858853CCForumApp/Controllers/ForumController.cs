@@ -127,7 +127,7 @@ namespace s3858853CCForumApp.Controllers
                 Key = keyFactory.CreateIncompleteKey(),
                 ["subject"] = subject,
                 ["messageText"] = messageText,
-                ["User"] = UserID,
+                ["UserID"] = UserID,
                 ["postTimeUTC"] = DateTime.Now,
                 ["Image"] = imageString
             };

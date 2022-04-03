@@ -55,8 +55,8 @@
 
                 <tr>
                     <th class="table-primary">@Html.DisplayNameFor(x => x[0].postTimeUTC)</th>
-                    <th class="table-primary">@Html.DisplayNameFor(x => x[0].User.user_name)</th>
-                    <th class="table-primary">@Html.DisplayNameFor(x => x[0].User.image)</th>
+                    <th class="table-primary">@Html.DisplayName("userID")</th>
+                    <th class="table-primary">@Html.DisplayName("image")</th>
                 </tr>
 
                 var userImage = previousPost[postCount].Image;
@@ -67,7 +67,7 @@
 
                     <tr>
                         <td>@Html.DisplayFor(x => previousPost[postCount].postTimeUTC)</td>
-                        <td>@Html.DisplayFor(x => previousPost[postCount].User.user_name)</td>
+                        <td>@Html.DisplayFor(x => previousPost[postCount].UserID)</td>
                         <td><img src=@userImage width="120px" height="120px" /></td>
                     </tr>
 
