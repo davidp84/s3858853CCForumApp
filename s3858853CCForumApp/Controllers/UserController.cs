@@ -12,6 +12,7 @@ using s3858853CCForumApp.Models;
 using System.Linq;
 using System.Text;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace s3858853CCForumApp.Controllers
 {
@@ -26,27 +27,27 @@ namespace s3858853CCForumApp.Controllers
         {
         }
 
-        public IActionResult Index()
-        {
-            DatastoreDb _context = new DatastoreDbBuilder
-            {
-                ProjectId = "s3858853-a1",
-                EmulatorDetection = EmulatorDetection.EmulatorOrProduction
-            }.Build();
+        //public IActionResult Index()
+        //{
+        //    DatastoreDb _context = new DatastoreDbBuilder
+        //    {
+        //        ProjectId = "s3858853-a1",
+        //        EmulatorDetection = EmulatorDetection.EmulatorOrProduction
+        //    }.Build();
 
-            KeyFactory _keyFactory = _context.CreateKeyFactory("user");
+        //    KeyFactory _keyFactory = _context.CreateKeyFactory("user");
 
-            Key key = _keyFactory.CreateKey("default");
+        //    Key key = _keyFactory.CreateKey("default");
 
-            Query query = new Query("user")
-            {
-                Filter = Filter.Equal("id", UserID)
-            };
+        //    Query query = new Query("user")
+        //    {
+        //        Filter = Filter.Equal("id", UserID)
+        //    };
 
-            //lazy loading
-            var user = _context.RunQueryLazilyAsync(query);
-            return View(user);
-        }
+        //    //lazy loading
+        //    var user = _context.RunQueryLazilyAsync(query);
+        //    return View(user);
+        //}
 
         public async Task<IActionResult> User(int id)
         {
@@ -66,8 +67,41 @@ namespace s3858853CCForumApp.Controllers
             };
 
             //lazy loading
-            var user = _context.RunQueryLazilyAsync(query);
-            return View(user);
+            var entities = _context.RunQueryLazilyAsync(query);
+
+            var queryUser = "";
+
+            await entities.ForEachAsync(x =>
+            {
+                ViewBag.user = x;
+                queryUser = (string)x["user_name"];
+                
+            });
+
+            KeyFactory _newKeyFactory = _context.CreateKeyFactory("post");
+
+            Key newKey = _keyFactory.CreateKey("default");
+
+            Query secondQuery = new Query("Post")
+            {
+                Filter = Filter.Equal("user_name", queryUser)
+            };
+
+            //lazy loading
+            var posts = _context.RunQueryLazilyAsync(secondQuery);
+
+            var user = new Dictionary<string, Entity>();
+
+            var userPosts = posts.GetAsyncEnumerator(CancellationToken.None);
+
+            //await entities.ForEachAsync(x =>
+            //{
+            //    user.TryAdd(x.Properties.ToDictionary(x => x.Key, x => x.Value));
+            //});
+
+            
+
+            return View(userPosts);
         }
 
         public async Task<IActionResult> ChangePassword()

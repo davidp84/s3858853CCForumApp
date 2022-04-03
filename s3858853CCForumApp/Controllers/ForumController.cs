@@ -79,7 +79,7 @@ namespace s3858853CCForumApp.Controllers
 
             KeyFactory _keyFactory = _context.CreateKeyFactory("post");
 
-            Key key = _keyFactory.CreateKey("default");
+            //Key key = _keyFactory.CreateKey("default");
 
             Query query = new Query("post")
             {
@@ -99,9 +99,7 @@ namespace s3858853CCForumApp.Controllers
                 EmulatorDetection = EmulatorDetection.EmulatorOrProduction
             }.Build();
 
-            KeyFactory _keyFactory = _context.CreateKeyFactory("post");
-
-            Key key = _keyFactory.CreateKey("default");
+            KeyFactory keyFactory = _context.CreateKeyFactory("post");
 
             string imageString = "gs://s3858853-a1-storage/" + imageName;
 
@@ -126,7 +124,7 @@ namespace s3858853CCForumApp.Controllers
 
             Entity update = new Entity
             {
-                Key = key,
+                Key = keyFactory.CreateIncompleteKey(),
                 ["subject"] = subject,
                 ["messageText"] = messageText,
                 ["User"] = UserID,

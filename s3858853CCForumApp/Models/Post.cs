@@ -9,7 +9,7 @@ namespace s3858853CCForumApp.Models
         [Required, StringLength(64)]
         public string subject { get; init; }
 
-        public virtual User User { get; init; }
+        public string UserID { get; init; }
 
         [Column(TypeName = "nchar")]
         [Required]

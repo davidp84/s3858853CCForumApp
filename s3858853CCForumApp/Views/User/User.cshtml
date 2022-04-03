@@ -1,4 +1,4 @@
-﻿@model List<Post>
+﻿@model IEnumerable<Post>
 @{
     ViewData["Title"] = "User Page";
     var user = (User)ViewBag.User;
@@ -36,12 +36,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <table class="table table-striped">
                 <tr>
-                    <th class="table-primary">@Html.DisplayNameFor(x => x[0].subject)</th>
-                    <th class="table-primary">@Html.DisplayNameFor(x => x[0].postTimeUTC)</th>
+                    <th class="table-primary">@Html.DisplayName("Subject")</th>
+                    <th class="table-primary">@Html.DisplayName("postTimeUTC")</th>
                     <th class="table-primary">@Html.DisplayName("Edit")</th>
                 </tr>
 
-                @for (int i = 0; i < Model.Count; i++)
+                @for (int i = 0; i < Model.ToList().Count; i++)
                 {
                     var previousPost = Model.ToList();
 

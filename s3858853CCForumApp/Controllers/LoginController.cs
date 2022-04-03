@@ -48,8 +48,6 @@ namespace s3858853CCForumApp.Controllers
             bool confirmed = false;
             var customer = "No Customer";
 
-            var test = "1";
-
             await login.ForEachAsync(x =>
             {
                 //attempt password check
@@ -64,7 +62,7 @@ namespace s3858853CCForumApp.Controllers
                     confirmed = true;
                     customer = (string)x["user_name"];
                 }
-                test += x.ToString();
+
             });
 
             if (loginCheck == false)
@@ -75,7 +73,7 @@ namespace s3858853CCForumApp.Controllers
 
             if (confirmed == false)
             {
-                ModelState.AddModelError("LoginFailure", "ID or password is invalid" + test);
+                ModelState.AddModelError("LoginFailure", "ID or password is invalid");
                 return View(new Login { id = id });
             }
 
@@ -83,7 +81,7 @@ namespace s3858853CCForumApp.Controllers
             HttpContext.Session.SetString("sessionID", id);
             HttpContext.Session.SetString("username", customer);
 
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("User", "User");
         }
 
         [Route("LoggingOut")]

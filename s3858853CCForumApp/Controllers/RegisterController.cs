@@ -21,7 +21,7 @@ namespace s3858853CCForumApp.Controllers
 
         //attempt user registration
         [HttpPost]
-        public async Task<IActionResult> Register(string loginID, string username, string password, string imageName, string imagePath, IFormFile image)
+        public async Task<IActionResult> Register(string id, string user_name, string Password, string imageName, string imagePath, IFormFile Image)
         {
 
             DatastoreDb _context = new DatastoreDbBuilder
@@ -36,12 +36,22 @@ namespace s3858853CCForumApp.Controllers
 
             Query query = new Query("user")
             {
-                Filter = Filter.Equal("id", loginID)
+                Filter = Filter.Equal("id", id)
             };
             //find login id
             var login = _context.RunQueryLazilyAsync(query);
 
-            if (login != null)
+            var loginCheck = true;
+
+            await login.ForEachAsync(x =>
+            {
+                if (x == null)
+                {
+                    loginCheck = false;
+                }
+            });
+
+            if (loginCheck == false)
             {
                 ModelState.AddModelError("RegistrationFailure", "The ID already exists");
                 return View();
@@ -49,13 +59,24 @@ namespace s3858853CCForumApp.Controllers
 
             Query usernameQuery = new Query("user")
             {
-                Filter = Filter.Equal("user_name", username)
+                Filter = Filter.Equal("user_name", user_name)
             };
 
             //find username
             var userName = _context.RunQueryLazilyAsync(usernameQuery);
 
-            if (userName != null)
+            bool confirmed = false;
+
+            await userName.ForEachAsync(x =>
+            {
+                if (x != null)
+                {
+                    confirmed = true;
+                }
+            });
+
+
+            if (confirmed == true)
             {
                 ModelState.AddModelError("RegistrationFailure", "The username already exists");
                 return View();
@@ -63,12 +84,14 @@ namespace s3858853CCForumApp.Controllers
 
             string imageString = "gs://s3858853-a1-storage/" + imageName;
 
+            KeyFactory keyFactory = _context.CreateKeyFactory("user");
+
             Entity user = new Entity()
             {
-                Key = _context.CreateKeyFactory("user").CreateKey("default"),
-                ["id"] = loginID,
-                ["user_name"] = username,
-                ["password"] = password,
+                Key = keyFactory.CreateIncompleteKey(),
+                ["id"] = id,
+                ["user_name"] = user_name,
+                ["password"] = Password,
                 ["image"] = imageString
             };
 
@@ -80,7 +103,9 @@ namespace s3858853CCForumApp.Controllers
 
             var bucket = client.GetBucketAsync("s3858853-a1-storage");
 
-            var content = new FileStream(imagePath, FileMode.Open, FileAccess.Read);
+            var filePath = Path.GetFullPath(imageName);
+
+            var content = new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
             // Upload file to bucket
             if (imageName.Contains(".png"))
