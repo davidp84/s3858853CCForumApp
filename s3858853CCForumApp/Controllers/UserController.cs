@@ -27,28 +27,6 @@ namespace s3858853CCForumApp.Controllers
         {
         }
 
-        //public IActionResult Index()
-        //{
-        //    DatastoreDb _context = new DatastoreDbBuilder
-        //    {
-        //        ProjectId = "s3858853-a1",
-        //        EmulatorDetection = EmulatorDetection.EmulatorOrProduction
-        //    }.Build();
-
-        //    KeyFactory _keyFactory = _context.CreateKeyFactory("user");
-
-        //    Key key = _keyFactory.CreateKey("default");
-
-        //    Query query = new Query("user")
-        //    {
-        //        Filter = Filter.Equal("id", UserID)
-        //    };
-
-        //    //lazy loading
-        //    var user = _context.RunQueryLazilyAsync(query);
-        //    return View(user);
-        //}
-
         public async Task<IActionResult> User(int id)
         {
             DatastoreDb _context = new DatastoreDbBuilder
@@ -76,7 +54,7 @@ namespace s3858853CCForumApp.Controllers
             await entities.ForEachAsync(x =>
             {
                 
-                queryUser = (string)x["user_name"];
+                queryUser = (string)x["id"];
 
                 tempUser.id = (string)x["id"];
                 tempUser.user_name = (string)x["user_name"];
@@ -93,7 +71,7 @@ namespace s3858853CCForumApp.Controllers
 
             Query secondQuery = new Query("Post")
             {
-                Filter = Filter.Equal("user_name", queryUser)
+                Filter = Filter.Equal("UserID", queryUser)
             };
 
             //lazy loading
@@ -103,7 +81,7 @@ namespace s3858853CCForumApp.Controllers
 
             var userPosts = new List<Post>();
 
-            await entities.ForEachAsync(x =>
+            await posts.ForEachAsync(x =>
             {
                 tempPost.subject = (string)x["subject"];
                 tempPost.UserID = (string)x["UserID"];
