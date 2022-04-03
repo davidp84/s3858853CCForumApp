@@ -12,7 +12,7 @@ namespace s3858853CCForumApp.Models
     public record Login
     {
         [Column(TypeName = "nchar")]
-        [StringLength(8)]
+        [StringLength(9)]
         public string id { get; init; }
 
         public virtual User User { get; init; }
