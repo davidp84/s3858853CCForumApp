@@ -123,14 +123,9 @@ namespace s3858853CCForumApp.Controllers
                 var dataObject = await client.UploadObjectAsync("s3858853-a1-storage", imageName, obj1, memoryStream);                
             }
 
-            
-   
-
             return RedirectToAction("Login", "Login");
 
         }
-
-        //private async Task UploadFile()
 
     }
 }
