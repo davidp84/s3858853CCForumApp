@@ -1,0 +1,41 @@
+@{
+    ViewData["Title"] = "Edit Post Page";
+    var post = (Post)ViewBag.Post;
+}
+
+<h1 class="display-4">Edit Post Page</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditPost" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label label="subject">Subject:</label>
+                <input label="subject" type="text" class="form-control" id="subject" value=@post.subject data-val="true"
+                       data-val-required="Subject cannot be blank.">
+                <span validation-for="subject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label label="messageText">Message Text:</label>
+                <input label="messageText" type="text" class="form-control" id="messageText" value=@post.messageText data-val="true" />
+                <input label="postTimeUTC" type="hidden" class="form-control" id="postTimeUTC" value=@post.postTimeUTC data-val="true"
+            </div>
+            <div>
+                <fieldset>
+                    <legend>Upload Image</legend>
+                    <label for="Image">Image</label>
+                    <input type="file" name="Image" value=<img src=@post.image width="120px" height="120px"/>/>
+                    <br />
+                </fieldset>
+            </div>
+            <div>
+                <table class="table">
+                    <tr>
+                        <td> <input type="submit" value="EditPost" class="btn btn-primary" asp-action="Forum" asp-route-id="@user.id"></td>
+                        <td> <a class="btn btn-primary" asp-action="EditPost" >Submit</a></td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+</div>
+</div>

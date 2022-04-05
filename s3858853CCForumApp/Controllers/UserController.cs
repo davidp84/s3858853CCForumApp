@@ -300,7 +300,7 @@ namespace s3858853CCForumApp.Controllers
                 }
             });
 
-            return RedirectToAction("Index", "Forum");
+            return RedirectToAction("Forum", "Forum");
 
         }
        
