@@ -114,7 +114,22 @@ namespace s3858853CCForumApp.Controllers
             };
 
             var customer = _context.RunQueryLazilyAsync(query);
-            return View(customer);
+
+            var tempUser = new User();
+
+            await customer.ForEachAsync(x =>
+            {
+                
+                queryUser = (string)x["id"];
+
+                tempUser.id = (string)x["id"];
+                tempUser.user_name = (string)x["user_name"];
+                tempUser.password = (string)x["password"];
+                tempUser.image = (string)x["image"];
+
+            });
+
+            return View(tempUser);
         }
 
         [HttpPost]
@@ -166,13 +181,13 @@ namespace s3858853CCForumApp.Controllers
 
             if (confirmed == true)
             {
-                return RedirectToAction("Login", "User");
+                return RedirectToAction("Login", "Login");
             }
             //finally if password not verified or another error, return error screen
             else
             {
                 ModelState.AddModelError("PasswordError", "Old password is incorrect");
-                return View(customer);
+                return View(tempUser);
             }
 
         }
