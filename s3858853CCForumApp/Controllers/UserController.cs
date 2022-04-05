@@ -192,6 +192,17 @@ namespace s3858853CCForumApp.Controllers
 
         }
 
+        public async Task<IActionResult> UpdatePost()
+        {
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePost(string subject, string messageText, string Image, DateTime postTimeUTC)
+        {
+
+        }
+
         public async Task<IActionResult> EditPost()
         {
             DatastoreDb _context = new DatastoreDbBuilder
