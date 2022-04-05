@@ -81,7 +81,7 @@ namespace s3858853CCForumApp.Controllers
             HttpContext.Session.SetString("sessionID", id);
             HttpContext.Session.SetString("username", customer);
 
-            return RedirectToAction("User", "User");
+            return RedirectToAction("Forum", "Forum");
         }
 
         [Route("LoggingOut")]

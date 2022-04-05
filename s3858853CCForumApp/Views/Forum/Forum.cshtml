@@ -5,7 +5,7 @@
 }
 
 <h1 class="display-4">Forum Page</h1>
-<a asp-controller="User" asp-action="User" asp-route-id="">@user.user_name</a>
+<a asp-controller="User" asp-action="User" asp-route-id="">@user.userID</a>
 <img src="~/@user.image" width="120px" height="120px" />
 
 <div class="row">
@@ -27,10 +27,7 @@
                     <legend>Upload Image</legend>
                     <label for="Image">Image</label>
                     <input type="file" name="Image" />
-                    <input name="imageName" type="hidden" value=Path.GetFileName(Image.FileName) />
-                    <input name="imagePath" type="hidden" value=Image.FilePath />
                     <br />
-                    @*<input type="submit" value="Upload" />*@
                 </fieldset>
             </div>
             <div>
