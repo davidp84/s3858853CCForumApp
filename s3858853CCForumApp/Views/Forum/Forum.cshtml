@@ -45,10 +45,17 @@
         <table class="table table-striped">
 
 
-            @for (int i = 0; i < 10; i++)
+            @{var postCount = 10;};
+
+            @if (Model.Count < 10)
+            {
+                postCount = Model.Count;
+            }
+
+
+            @for (int i = 0; i < postCount; i++)
             {
                 var previousPost = Model.ToList();
-                var postCount = Model.Count - i;
 
                 <tr>
                     <th class="table-primary">@Html.DisplayNameFor(x => x[0].postTimeUTC)</th>
@@ -74,6 +81,7 @@
                     <tr><td><img src=@postImage width="120px" height="120px" /></td></tr>
                 }
             }
+            
 
         </table>
 

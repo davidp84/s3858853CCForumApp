@@ -24,14 +24,14 @@
                 <fieldset>
                     <legend>Upload Image</legend>
                     <label for="Image">Image</label>
-                    <input type="file" name="Image" value=<img src=@post.image width="120px" height="120px"/>/>
+                    <input type="file" name="Image" value=<img src=@post.Image width="120px" height="120px"/>/>
                     <br />
                 </fieldset>
             </div>
             <div>
                 <table class="table">
                     <tr>
-                        <td> <input type="submit" value="EditPost" class="btn btn-primary" asp-action="Forum" asp-route-id="@user.id"></td>
+                        <td> <input type="submit" value="EditPost" class="btn btn-primary" asp-action="Forum"></td>
                         <td> <a class="btn btn-primary" asp-action="EditPost" >Submit</a></td>
                     </tr>
                 </table>
