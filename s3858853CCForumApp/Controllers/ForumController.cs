@@ -91,9 +91,6 @@ namespace s3858853CCForumApp.Controllers
             });
 
             return View(userPosts);
-
-
-            return View(user);
         }
 
         public async Task<IActionResult> NewPost()

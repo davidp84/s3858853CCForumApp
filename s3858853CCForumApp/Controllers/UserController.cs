@@ -194,13 +194,50 @@ namespace s3858853CCForumApp.Controllers
 
         public async Task<IActionResult> UpdatePost()
         {
-
+            return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdatePost(string subject, string messageText, string Image, DateTime postTimeUTC)
         {
+            
+            DatastoreDb _context = new DatastoreDbBuilder
+            {
+                ProjectId = "s3858853-a1",
+                EmulatorDetection = EmulatorDetection.EmulatorOrProduction
+            }.Build();        
+            
+            KeyFactory _newKeyFactory = _context.CreateKeyFactory("post");
 
+            Key newKey = _keyFactory.CreateKey("default");
+
+            Query secondQuery = new Query("Post")
+            {
+                Filter = Filter.Equal("postTimeUTC", postTimeUTC)
+            };
+
+            //lazy loading
+            var posts = _context.RunQueryLazilyAsync(secondQuery);
+
+            var tempPost = new Post();
+
+            var userPosts = new List<Post>();
+
+            await posts.ForEachAsync(x =>
+            {
+                tempPost.subject = (string)x["subject"];
+                tempPost.UserID = (string)x["UserID"];
+                tempPost.messageText = (string)x["messageText"];
+                tempPost.postTimeUTC = (string)x["postTimeUTC"];
+                tempPost.Image = (string)x["Image"];
+
+                userPosts.Add(tempPost);
+
+            });
+
+            ViewBag.post = userPosts;
+
+            return RedirectToAction("User", "EditPost");
         }
 
         public async Task<IActionResult> EditPost()
