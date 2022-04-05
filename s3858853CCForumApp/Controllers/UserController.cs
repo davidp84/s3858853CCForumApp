@@ -115,6 +115,8 @@ namespace s3858853CCForumApp.Controllers
 
             var customer = _context.RunQueryLazilyAsync(query);
 
+            var queryUser = "";
+
             var tempUser = new User();
 
             await customer.ForEachAsync(x =>
@@ -187,7 +189,7 @@ namespace s3858853CCForumApp.Controllers
             else
             {
                 ModelState.AddModelError("PasswordError", "Old password is incorrect");
-                return View(tempUser);
+                return View();
             }
 
         }
@@ -207,9 +209,9 @@ namespace s3858853CCForumApp.Controllers
                 EmulatorDetection = EmulatorDetection.EmulatorOrProduction
             }.Build();        
             
-            KeyFactory _newKeyFactory = _context.CreateKeyFactory("post");
+            KeyFactory _KeyFactory = _context.CreateKeyFactory("post");
 
-            Key newKey = _keyFactory.CreateKey("default");
+            Key newKey = _KeyFactory.CreateKey("default");
 
             Query secondQuery = new Query("Post")
             {

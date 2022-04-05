@@ -47,6 +47,8 @@ namespace s3858853CCForumApp.Controllers
 
             var tempUser = new User();
 
+            var queryUser = "";
+
             await user.ForEachAsync(x =>
             {
                 
@@ -115,7 +117,7 @@ namespace s3858853CCForumApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewPost(string subject, string messageText, IFormFile image)
+        public async Task<IActionResult> NewPost(string subject, string messageText, IFormFile Image)
         {
             DatastoreDb _context = new DatastoreDbBuilder
             {
